@@ -5,7 +5,12 @@ spec_mock act just like the rea deal!
 * spec_mock won't let you use the mock in ways a real instance wouldn't allow.
 * When the class changes so will your mock!
 
-For example:
+## Installation
+```bash
+pip install spec_mock
+```
+
+## Example
 ```python
 from spec_mock import spec_mock
 
