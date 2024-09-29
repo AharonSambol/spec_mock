@@ -5,7 +5,7 @@ from unittest.mock import create_autospec, MagicMock, PropertyMock
 
 from spec_mock.ast_traverser import get_class_properties
 from spec_mock.get_signatures import get_type_hints_of_class
-from spec_mock.utils import _cached_spec_mock_inner, for_each_class_in_inheritance_hierarchy
+from spec_mock.utils import for_each_class_in_inheritance_hierarchy
 
 T = TypeVar('T')
 
@@ -51,3 +51,20 @@ def _spec_mock_inner(spec: Type[T], strict: bool, *, previous_classes: List[Type
             setattr(mock_instance, param_name, param_mock)
 
     return mock_instance
+
+
+cache = {}
+
+
+def _cached_spec_mock_inner(
+        instance_type: Type,
+        param_name: str,
+        spec: Type[T],
+        strict: bool,
+        *,
+        previous_classes: List[Type] = None
+) -> T:
+    if cached_result := cache.get((instance_type, param_name)):
+        return cached_result
+    cache[(instance_type, param_name)] = result = _spec_mock_inner(spec, strict, previous_classes=previous_classes)
+    return result
